@@ -1,0 +1,12 @@
+# Develop Environment
+.idea/
+__pycache__/
+venv/
+
+# For Deploy
+bin/
+
+# Other Files
+Dockerfile
+LICENSE.txt
+README.md
