@@ -18,7 +18,7 @@ def get_week_number(dt):
     return week
 
 
-def post_garbage_day(slack, channel):
+def post_garbage_day(slack, channel, icon_emoji=None):
     """
     post whether today is garbage day
     :param slack: Slacker instance
@@ -36,17 +36,27 @@ def post_garbage_day(slack, channel):
         return
 
     message = 'リマインダー：明日は不燃ゴミ'
-    slack.chat.post_message(channel, message)
+    slack.chat.post_message(channel, message, icon_emoji=icon_emoji)
 
 
 def main():
     try:
         slack_token = os.environ['SLACK_TOKEN']
-        channel = os.environ['DEFAULT_POST_CHANNEL']
     except KeyError:
-        print('環境変数が設定されていません.')
+        print('環境変数SLACK_TOKENが設定されていません.')
+
+    try:
+        channel = os.environ['POST_CHANNEL']
+    except KeyError:
+        channel = 'random'
+
+    try:
+        icon_emoji = os.environ['ICON_EMOJI']
+    except KeyError:
+        icon_emoji = ':owl:'
+
     slack = Slacker(slack_token)
-    post_garbage_day(slack, channel)
+    post_garbage_day(slack, channel, icon_emoji)
 
 
 if __name__ == '__main__':
