@@ -87,7 +87,11 @@ def main():
         icon_emoji = ':owl:'
 
     slack = Slacker(slack_token)
-    post_regular(slack, channel, 'setting/garbage.txt', icon_emoji)
+
+    base_dir = 'setting'
+    for file in os.listdir(base_dir):
+        path = os.path.join(base_dir, file)
+        post_regular(slack, channel, path, icon_emoji)
 
 
 if __name__ == '__main__':
