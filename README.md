@@ -2,7 +2,7 @@ regular_bot
 ====
 ## Description
 Slackへの定期的な通知を行うbotです。<br>
-デフォルトでは、第1・3金曜の燃えないゴミを出す日について、その前日の20時に通知するようになっています。
+デフォルトでは、毎日20時にチェックし、第1・3金曜の燃えないゴミを出す日の前日の場合は通知するようになっています。
 
 ## Requirement
 DockerとGoogleCloudSDKのインストールと、`gcloud auth login`を済ませておく必要があります。
@@ -13,7 +13,12 @@ DockerとGoogleCloudSDKのインストールと、`gcloud auth login`を済ま�
 $ cat common.env
 export PROJECT_ID=${your gcp project id}
 export SLACK_TOKEN=${your slack api token}
-export DEFAULT_POST_CHANNEL=${post channel}
+
+# 設定しない場合randomに投稿されます
+export POST_CHANNEL=${post channel}
+
+# 設定しない場合:owl:のアイコンで投稿されます
+export ICON_EMOJI=${bot icon}
 ```
 
 ## Deploy
