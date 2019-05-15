@@ -42,9 +42,14 @@ def post_garbage_day(slack, channel):
 def main():
     try:
         slack_token = os.environ['SLACK_TOKEN']
+    except KeyError:
+        print('環境変数SLACK_TOKENが設定されていません.')
+
+    try:
         channel = os.environ['DEFAULT_POST_CHANNEL']
     except KeyError:
-        print('環境変数が設定されていません.')
+        channel = 'random'
+
     slack = Slacker(slack_token)
     post_garbage_day(slack, channel)
 
