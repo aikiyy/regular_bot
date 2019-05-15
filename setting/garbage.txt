@@ -1,0 +1,22 @@
+# How to Write
+# ============
+# weekday_numbers,week_numbers,message
+#
+# weekday_numbers
+# 0: monday, 1: tuesday... 6: sunday
+# 0   if only monday
+# 5-6 if weekend
+# *   if all weekday
+#
+# week_numbers
+# 1   if only week1
+# 1-3 if week1 and week3
+# *   if all week
+
+# every week
+2-5,*,明日は可燃ゴミの日
+4,*,明日は古紙・ペットボトルの日
+1,*,明日はビン・カン・プラの日
+
+# every other week
+4,1-3,明日は不燃ゴミの日

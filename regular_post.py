@@ -18,25 +18,56 @@ def get_week_number(dt):
     return week
 
 
-def post_garbage_day(slack, channel, icon_emoji=None):
+def read_setting(fn):
+    number_of_week_settings = []
+    with open(fn) as f:
+        for row in f:
+            if row[0] == '#' or not row.rstrip():
+                continue
+            _weekday_numbers, _week_numbers, message = row.rstrip().split(',')
+
+            if _weekday_numbers == '*':
+                weekday_numbers = [i for i in range(0, 7)]
+            else:
+                weekday_numbers = [int(i) for i in _weekday_numbers.split('-')]
+            if _week_numbers == '*':
+                week_numbers = [i for i in range(1, 6)]
+            else:
+                week_numbers = [int(i) for i in _week_numbers.split('-')]
+
+            setting = {
+                'weekday_numbers': weekday_numbers,
+                'week_numbers': week_numbers,
+                'message': message
+            }
+            number_of_week_settings.append(setting)
+
+    return number_of_week_settings
+
+
+def post_regular(slack, channel, fn, icon_emoji=None):
     """
     post whether today is garbage day
     :param slack: Slacker instance
     :param channel: posted channel
     :return:
     """
+    if os.path.exists(fn):
+        checks = read_setting(fn)
+    else:
+        print('セッティングファイルが見つかりませんでした。')
+        return
+
     tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
 
-    # return if tomorrow is not friday
-    if not tomorrow.weekday() == 4:
-        return
-
-    # return if today is not week1, 3
-    if get_week_number(tomorrow) not in (1, 3):
-        return
-
-    message = 'リマインダー：明日は不燃ゴミ'
-    slack.chat.post_message(channel, message, icon_emoji=icon_emoji)
+    for check in checks:
+        # check weekday
+        if tomorrow.weekday() not in check['weekday_numbers']:
+            continue
+        # check week of number
+        if get_week_number(tomorrow) not in check['week_numbers']:
+            continue
+        slack.chat.post_message(channel, check['message'], icon_emoji=icon_emoji)
 
 
 def main():
@@ -56,7 +87,11 @@ def main():
         icon_emoji = ':owl:'
 
     slack = Slacker(slack_token)
-    post_garbage_day(slack, channel, icon_emoji)
+
+    base_dir = 'setting'
+    for file in os.listdir(base_dir):
+        path = os.path.join(base_dir, file)
+        post_regular(slack, channel, path, icon_emoji)
 
 
 if __name__ == '__main__':
