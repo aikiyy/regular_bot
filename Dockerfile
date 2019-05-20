@@ -1,4 +1,4 @@
-FROM python:3.6.8-stretch
+FROM python:3.6.4-stretch
 ADD . /code
 WORKDIR /code
 
