@@ -12,17 +12,18 @@ Slackへの定期的な通知を行うbotです。<br>
 DockerとGoogleCloudSDKのインストールと、`gcloud auth login`を済ませておく必要があります。
 
 ## Setting
-必要な環境変数を記述したcommon.envファイルが必要です。
+GCPへのDockerイメージのデプロイ用に、GCPのプロジェクトIDを環境変数にセットする必要があります。
 ```
-$ cat common.env
-export PROJECT_ID=${your gcp project id}
-export SLACK_TOKEN=${your slack api token}
+$ export PROJECT_ID=${your gcp project _id}
+```
 
+ローカルでbotのテストをする際は、Slack Token等の環境変数をセットする必要があります。
+```
+$ export SLACK_TOKEN=${your slack api token}
 # 設定しない場合randomに投稿されます
-export POST_CHANNEL=${post channel}
-
+$ export POST_CHANNEL=${post channel}
 # 設定しない場合:owl:のアイコンで投稿されます
-export ICON_EMOJI=${bot icon}
+$ export ICON_EMOJI=${bot icon}
 ```
 
 投稿する内容と頻度はsettingフォルダ以下に記述します。<br>
