@@ -3,6 +3,7 @@ ADD . /code
 WORKDIR /code
 
 RUN pip install -r requirements.txt
-RUN /bin/bash -c "source common.env"
+
+ENV TZ='Asia/Tokyo'
 
 CMD ["python", "cron.py"]
